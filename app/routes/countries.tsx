@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
+import { parseAsString, useQueryStates } from "nuqs";
 
-import type { Country } from "~/types";
 import type { Route } from "./+types/countries";
+import type { Country } from "~/types";
 
 export async function clientLoader() {
   const res = await fetch("https://restcountries.com/v3.1/all");
@@ -11,8 +12,10 @@ export async function clientLoader() {
 }
 
 export default function Countries({ loaderData }: Route.ComponentProps) {
-  const [search, setSearch] = React.useState("");
-  const [region, setRegion] = React.useState("");
+  const [{ search, region }, setSearchParams] = useQueryStates({
+    search: parseAsString.withDefault(""),
+    region: parseAsString.withDefault(""),
+  });
 
   const { countries } = loaderData;
   const filteredCountries = React.useMemo(() => {
@@ -37,14 +40,14 @@ export default function Countries({ loaderData }: Route.ComponentProps) {
           type="text"
           placeholder="Search by name..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => setSearchParams({ search: e.target.value })}
           className="w-full rounded border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:outline-none sm:w-1/2"
         />
         <select
           name="region"
           id="region"
           value={region}
-          onChange={(e) => setRegion(e.target.value)}
+          onChange={(e) => setSearchParams({ region: e.target.value })}
           className="w-full rounded border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:outline-none sm:w-1/2"
         >
           <option value="">All Regions</option>

@@ -72,7 +72,7 @@ export default function Countries({ loaderData }: Route.ComponentProps) {
                 to={`/countries/${country.name.common}`}
                 className="text-lg font-semibold text-indigo-600 hover:underline"
               >
-                {country.name.common}
+                {country.flag} {country.name.common}
               </Link>
               <span className="mt-1 block text-sm text-gray-600">
                 Region: {country.region} | Population: {country.population}
